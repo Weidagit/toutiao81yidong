@@ -1,7 +1,8 @@
 <template>
 <div>
     <van-nav-bar
-  title="home"
+  title="黑马头条"
+  fixed
 />
 <van-tabs>
   <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
@@ -52,6 +53,17 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.van-tabs {
+  /deep/ .van-tabs__wrap {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    z-index: 100;
+  }
+  /deep/ .van-tabs__content {
+    margin-top: 90px;
+    margin-bottom: 50px;
+  }
+  }
 </style>

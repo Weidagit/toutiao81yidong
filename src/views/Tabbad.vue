@@ -17,6 +17,17 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.van-tabs {
+  /deep/ .van-tabs__wrap {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    z-index: 100;
+  }
+  /deep/ .van-tabs__content {
+    margin-top: 90px;
+    margin-bottom: 50px;
+  }
+  }
 </style>
