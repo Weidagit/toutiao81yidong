@@ -4,8 +4,14 @@
   title="黑马头条"
   fixed
 />
-<van-tabs>
-  <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
+<!-- 频道列表 -->
+<van-tabs animated>
+   <!-- 遍历标签页，显示频道列表 -->
+  <van-tab
+  v-for="channel in channels"
+  :title="channel.name"
+  :key="channel.id">
+   <!-- 文章列表,不同的标签页下有不同的列表 -->
     <van-list
   v-model="loading"
   :finished="finished"
@@ -24,16 +30,31 @@
 </template>
 
 <script>
+import { getDefaulOrUserChannels } from '../../api/channel'
 export default {
   data () {
     return {
+      // 列表用的数据
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      // 频道列表
+      channels: []
     }
   },
-
+  created () {
+    this.loadChannels()
+  },
   methods: {
+    // 加载频道列表
+    async loadChannels () {
+      try {
+        const data = await getDefaulOrUserChannels()
+        this.channels = data.channels
+      } catch (err) {
+        console.log(err)
+      }
+    },
     onLoad () {
       // 异步更新数据
       setTimeout(() => {

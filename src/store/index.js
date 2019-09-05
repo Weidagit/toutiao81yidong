@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as localStorageToos from '../utils/localStorage'
+import * as storsgeTools from '../utils/localStorage'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: localStorageToos.getItem('user')
+    user: storsgeTools.getItem('user')
   },
   mutations: {
     setUser (state, user) {
       state.user = user
-      localStorageToos.setItem('user', user)
+      storsgeTools.setItem('user', user)
     }
   },
   actions: {
