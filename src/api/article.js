@@ -3,7 +3,7 @@ import request from '../utils/request'
  * 获取文章列表（登录和不登录）
  * @param {*} 参数 channel_id,timestamp,with_top
  */
-export const getArticle = ({
+export const getArticles = ({
   // 频道的id
   channelId,
   // 时间戳

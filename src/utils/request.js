@@ -2,7 +2,7 @@ import axios from 'axios'
 import JSONbig from 'json-bigint'
 import store from '@/store'
 const instance = axios.create({
-  timeout: 1000,
+  timeout: 5000,
   baseURL: 'http://ttapi.research.itcast.cn'
 })
 instance.defaults.transformResponse = [function (data) {
