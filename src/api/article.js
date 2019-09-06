@@ -17,3 +17,10 @@ export const getArticles = ({
     with_top: withTop
   }
 })
+// 不喜欢文章
+export const dislikeArticle = (id) => {
+  return request.post('/app/v1_0/article/dislikes', {
+    // 文章的id
+    target: id
+  })
+}
