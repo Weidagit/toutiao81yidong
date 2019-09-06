@@ -1,8 +1,10 @@
 <template>
   <div>
-    <van-nav-bar title="黑马头条" fixed />
+    <van-nav-bar title="琳达头条" fixed />
     <!-- 频道列表 -->
     <van-tabs animated v-model="activeIndex">
+      <!-- 小按钮，点击弹出频道管理的弹出层 -->
+      <van-icon slot="nav-right" name="wap-nav" class="nav-btn" @click="showChannelEdit=true" />
       <!-- 遍历标签页，显示频道列表 -->
       <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表,不同的标签页下有不同的列表 -->
@@ -22,7 +24,35 @@
               v-for="article in currentChannel.articles"
               :key="article.art_id.toString()"
               :title="article.title"
-            />
+            >
+              <div slot="label">
+                <!-- grid 显示封面
+                  article.cover.type   0 没有图片   1 1个图片 3 3个图片
+                 -->
+                <van-grid v-if="article.cover.type" :border="false" :column-num="3">
+                  <van-grid-item
+                    v-for="(img, index) in article.cover.images"
+                    :key="img + index"
+                  >
+                    <van-image lazy-load height="80" :src="img" >
+                      <!-- 图片的加载提示 -->
+                      <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                      </template>
+                      <!-- 自定义加载失败提示 -->
+                      <template v-slot:error>加载失败</template>
+                    </van-image>
+                  </van-grid-item>
+                </van-grid>
+                <p>
+                  <span>{{ article.aut_name }}</span>&nbsp;
+                  <span>{{ article.comm_count }}评论</span>&nbsp;
+                  <span>{{ article.pubdate }}</span>&nbsp;
+
+                  <van-icon name="cross" class="close" />
+                </p>
+              </div>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -35,6 +65,10 @@
 import { getDefaulOrUserChannels } from '../../api/channel'
 import { getArticles } from '../../api/article'
 import ChannelEdit from '../../components/ChannelEdit'
+import Vue from 'vue'
+import { Lazyload } from 'vant'
+// options 为可选参数，无则不传
+Vue.use(Lazyload)
 export default {
   components: {
     ChannelEdit
@@ -147,5 +181,16 @@ export default {
     margin-top: 90px;
     margin-bottom: 50px;
   }
+}
+.nav-btn {
+  position: fixed;
+  right: 10px;
+  line-height: 44px;
+  background-color: #fff;
+  opacity: 0.8;
+  font-size: 22px;
+}
+.close {
+  float: right;
 }
 </style>
