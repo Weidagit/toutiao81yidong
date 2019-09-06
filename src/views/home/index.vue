@@ -1,49 +1,57 @@
 <template>
-<div>
-    <van-nav-bar
-  title="黑马头条"
-  fixed
-/>
-<!-- 频道列表 -->
-<van-tabs animated v-model="activeIndex">
-   <!-- 遍历标签页，显示频道列表 -->
-  <van-tab
-  v-for="channel in channels"
-  :title="channel.name"
-  :key="channel.id">
-   <!-- 文章列表,不同的标签页下有不同的列表 -->
-    <van-list
-  v-model="currentChannel.loading"
-  :finished="currentChannel.finished"
-  finished-text="没有更多了"
-  @load="onLoad"
->
-  <van-cell
-    v-for="article in currentChannel.articles"
-    :key="article.art_id.toString()"
-    :title="article.title"
-  />
-</van-list>
-  </van-tab>
-</van-tabs>
-</div>
+  <div>
+    <van-nav-bar title="黑马头条" fixed />
+    <!-- 频道列表 -->
+    <van-tabs animated v-model="activeIndex">
+      <!-- 遍历标签页，显示频道列表 -->
+      <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
+        <!-- 文章列表,不同的标签页下有不同的列表 -->
+        <!-- 下拉加载更多组件 -->
+        <van-pull-refresh
+          :success-text="successText"
+          v-model="currentChannel.pullLoading"
+          @refresh="onRefresh"
+        >
+          <van-list
+            v-model="currentChannel.loading"
+            :finished="currentChannel.finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell
+              v-for="article in currentChannel.articles"
+              :key="article.art_id.toString()"
+              :title="article.title"
+            />
+          </van-list>
+        </van-pull-refresh>
+      </van-tab>
+    </van-tabs>
+    <ChannelEdit></ChannelEdit>
+  </div>
 </template>
 
 <script>
 import { getDefaulOrUserChannels } from '../../api/channel'
 import { getArticles } from '../../api/article'
+import ChannelEdit from '../../components/ChannelEdit'
 export default {
+  components: {
+    ChannelEdit
+  },
   data () {
     return {
       // 列表用的数据
-      list: [],
-      loading: false,
-      finished: false,
+      // list: [],
+      // loading: false,
+      // finished: false,
       // 频道列表
       channels: [],
       // tab是组件中默认显示的tab项的索引
       // 通过该index，可以找到当前的频道对象
-      activeIndex: 0
+      activeIndex: 0,
+      // 下拉更新完毕之后显示，成功的提示
+      successText: ''
     }
   },
   created () {
@@ -61,11 +69,14 @@ export default {
       try {
         const data = await getDefaulOrUserChannels()
         // 给所有的频道设置，时间戳和文章数组
-        data.channels.forEach((channel) => {
+        data.channels.forEach(channel => {
           channel.timestamp = null
           channel.articles = []
+          // 下拉加载
           channel.loading = false
           channel.finished = false
+          // 下拉加载
+          channel.pullLoading = false
         })
         this.channels = data.channels
       } catch (err) {
@@ -98,10 +109,29 @@ export default {
         // this.finished = true
         this.currentChannel.finished = true
       }
+    },
+    async onRefresh () {
+      try {
+        const data = await getArticles({
+          // 频道的id
+          channelId: this.currentChannel.id,
+          // 时间戳
+          timestamp: Date.now(),
+          // 是否包含置顶1，0不包含
+          withTop: 1
+        })
+        // 设置加载完毕
+        this.currentChannel.pullLoading = false
+
+        // 把数据放到数组的最前面（最新数据）
+        this.currentChannel.articles.unshift(...data.results)
+        this.successText = `加载了${data.results.length}条数据`
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
-
 </script>
 
 <style lang="less" scoped>
@@ -110,11 +140,12 @@ export default {
     position: fixed;
     top: 46px;
     left: 0;
+    right: 10px;
     z-index: 100;
   }
   /deep/ .van-tabs__content {
     margin-top: 90px;
     margin-bottom: 50px;
   }
-  }
+}
 </style>
