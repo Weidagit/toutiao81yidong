@@ -57,7 +57,8 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <ChannelEdit></ChannelEdit>
+    <Channel-Edit></Channel-Edit>
+    <More-Action></More-Action>
   </div>
 </template>
 
@@ -65,13 +66,15 @@
 import { getDefaulOrUserChannels } from '../../api/channel'
 import { getArticles } from '../../api/article'
 import ChannelEdit from '../../components/ChannelEdit'
+import MoreAction from '../../components/MoreAction'
 import Vue from 'vue'
 import { Lazyload } from 'vant'
 // options 为可选参数，无则不传
 Vue.use(Lazyload)
 export default {
   components: {
-    ChannelEdit
+    ChannelEdit,
+    MoreAction
   },
   data () {
     return {
