@@ -10,6 +10,10 @@ import './styles/index.less'
 import VeeValidate, { Validator } from 'vee-validate'
 import zhCN from 'vee-validate/dist/locale/zh_CN'
 
+import { fmtDate } from '@/utils/dayjs'
+// 获取相对时间的过滤器
+Vue.filter('fmtDate', fmtDate)
+
 Vue.use(VeeValidate, {
   // 文本框中触发验证的事件，默认是input
   // 如果为空的话，文本框输入过程中不验证，需要调用validate方法验证
