@@ -13,7 +13,7 @@ export default {
   name: 'ChannelEdit',
   data () {
     return {
-      show: true
+      show: false
     }
   }
 }
