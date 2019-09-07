@@ -54,7 +54,7 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <Channel-Edit v-model="showChannelEdit"></Channel-Edit>
+    <Channel-Edit :channels="channels" v-model="showChannelEdit"></Channel-Edit>
     <!--
       v-model 等价于
       v-bind:value="showMoreAction"
