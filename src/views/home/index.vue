@@ -6,11 +6,7 @@
       <!-- 小按钮，点击弹出频道管理的弹出层 -->
       <van-icon slot="nav-right" name="wap-nav" class="nav-btn" @click="showChannelEdit=true" />
       <!-- 遍历标签页，显示频道列表 -->
-      <van-tab
-       type="line"
-      v-for="channel in channels"
-      :title="channel.name"
-      :key="channel.id">
+      <van-tab type="line" v-for="channel in channels" :title="channel.name" :key="channel.id">
         <!-- 文章列表,不同的标签页下有不同的列表 -->
         <!-- 下拉加载更多组件 -->
         <van-pull-refresh
@@ -32,13 +28,10 @@
               <div slot="label">
                 <!-- grid 显示封面
                   article.cover.type   0 没有图片   1 1个图片 3 3个图片
-                 -->
+                -->
                 <van-grid v-if="article.cover.type" :border="false" :column-num="3">
-                  <van-grid-item
-                    v-for="(img, index) in article.cover.images"
-                    :key="img + index"
-                  >
-                    <van-image lazy-load height="80" :src="img" >
+                  <van-grid-item v-for="(img, index) in article.cover.images" :key="img + index">
+                    <van-image lazy-load height="80" :src="img">
                       <!-- 图片的加载提示 -->
                       <template v-slot:loading>
                         <van-loading type="spinner" size="20" />
@@ -52,7 +45,7 @@
                   <span>{{ article.aut_name }}</span>&nbsp;
                   <span>{{ article.comm_count }}评论</span>&nbsp;
                   <span>{{ article.pubdate| fmtDate}}</span>&nbsp;
-                                 <!-- 点击x按钮，记录当前的文章对象 -->
+                  <!-- 点击x按钮，记录当前的文章对象 -->
                   <van-icon name="cross" class="close" @click="handleAction(article)" />
                 </p>
               </div>
@@ -66,16 +59,15 @@
       v-model 等价于
       v-bind:value="showMoreAction"
       v-on:input="showMoreAction = $event"
-     -->
+    -->
 
-     <!-- 如果article的值为null 不显示more-action -->
+    <!-- 如果article的值为null 不显示more-action -->
     <More-Action
-     @handleSuccess="handleSuccess"
-    v-if="currentArticle"
-    :article="currentArticle"
-    v-model="showMoreAction">
-
-    </More-Action>
+      @handleSuccess="handleSuccess"
+      v-if="currentArticle"
+      :article="currentArticle"
+      v-model="showMoreAction"
+    ></More-Action>
   </div>
 </template>
 
@@ -86,6 +78,7 @@ import ChannelEdit from '../../components/ChannelEdit'
 import MoreAction from '../../components/MoreAction'
 import Vue from 'vue'
 import { Lazyload } from 'vant'
+import { getItem, setItem } from '../../utils/localStorage'
 // options 为可选参数，无则不传
 Vue.use(Lazyload)
 export default {
@@ -124,9 +117,24 @@ export default {
     // 加载频道列表
     async loadChannels () {
       try {
-        const data = await getDefaulOrUserChannels()
+        let channels = []
+        // 1. 如果用户登录，发送请求，获取数据
+        if (this.$store.state.user) {
+          const data = await getDefaulOrUserChannels()
+          channels = data.channels
+        } else {
+          // 2. 如果用户没有登录，先去本地存储中获取数据，如果没有数据再发送请求
+          // 如果本地存储中没有值，获取的是null
+          channels = getItem('channels')
+          if (!channels) {
+            const data = await getDefaulOrUserChannels()
+            channels = data.channels
+            setItem('channels', channels)
+          }
+        }
+
         // 给所有的频道设置，时间戳和文章数组
-        data.channels.forEach(channel => {
+        channels.forEach(channel => {
           channel.timestamp = null
           channel.articles = []
           // 下拉加载
@@ -135,7 +143,7 @@ export default {
           // 下拉加载
           channel.pullLoading = false
         })
-        this.channels = data.channels
+        this.channels = channels
       } catch (err) {
         console.log(err)
       }
@@ -201,7 +209,7 @@ export default {
       // 找到当前文章在数组中的索引
       // findIndex() 查找第一个满足条件的元素的索引
       const articles = this.currentChannel.articles
-      const index = articles.findIndex((article) => {
+      const index = articles.findIndex(article => {
         return article.art_id === this.currentArticle.art_id
       })
       // 删除指定位置的元素
