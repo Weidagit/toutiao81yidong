@@ -54,7 +54,7 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-    <Channel-Edit></Channel-Edit>
+    <Channel-Edit v-model="showChannelEdit"></Channel-Edit>
     <!--
       v-model 等价于
       v-bind:value="showMoreAction"
@@ -101,7 +101,9 @@ export default {
       successText: '',
       showMoreAction: false,
       // 点击x的时候，记录的当前文章对象
-      currentArticle: null
+      currentArticle: null,
+      // 控制频道管理的弹出层显示隐藏
+      showChannelEdit: false
     }
   },
   created () {
