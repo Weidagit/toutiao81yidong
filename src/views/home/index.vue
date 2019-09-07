@@ -6,7 +6,11 @@
       <!-- 小按钮，点击弹出频道管理的弹出层 -->
       <van-icon slot="nav-right" name="wap-nav" class="nav-btn" @click="showChannelEdit=true" />
       <!-- 遍历标签页，显示频道列表 -->
-      <van-tab v-for="channel in channels" :title="channel.name" :key="channel.id">
+      <van-tab
+       type="line"
+      v-for="channel in channels"
+      :title="channel.name"
+      :key="channel.id">
         <!-- 文章列表,不同的标签页下有不同的列表 -->
         <!-- 下拉加载更多组件 -->
         <van-pull-refresh
