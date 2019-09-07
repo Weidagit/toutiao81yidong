@@ -9,10 +9,19 @@
     <!-- 我的频道 -->
     <van-cell title="我的频道" label="点击进入频道">
       <van-button
+        v-show="!isEdit"
+        @click="isEdit=true"
         round
         type="danger"
         size="mini"
       >编辑</van-button>
+      <van-button
+       v-show="isEdit"
+        @click="isEdit=false"
+        round
+        type="danger"
+        size="mini"
+      >完成</van-button>
     </van-cell>
     <van-grid>
       <van-grid-item
@@ -20,10 +29,12 @@
         :key="value"
         text="文字"
       >
+      <!-- 关闭按钮 -->
         <van-icon
           slot="icon"
           class="close-icon"
           name="close"
+          v-show="isEdit"
         />
       </van-grid-item>
     </van-grid>
@@ -50,7 +61,8 @@ export default {
   },
   data () {
     return {
-
+      // 是否是编辑模式
+      isEdit: false
     }
   }
 }
