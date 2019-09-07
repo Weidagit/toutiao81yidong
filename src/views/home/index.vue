@@ -48,8 +48,8 @@
                   <span>{{ article.aut_name }}</span>&nbsp;
                   <span>{{ article.comm_count }}评论</span>&nbsp;
                   <span>{{ article.pubdate| fmtDate}}</span>&nbsp;
-
-                  <van-icon name="cross" class="close" @click="showMoreAction=true"/>
+                                 <!-- 点击x按钮，记录当前的文章对象 -->
+                  <van-icon name="cross" class="close" @click="handleAction(article)" />
                 </p>
               </div>
             </van-cell>
@@ -63,7 +63,15 @@
       v-bind:value="showMoreAction"
       v-on:input="showMoreAction = $event"
      -->
-    <More-Action  v-model="showMoreAction"></More-Action>
+
+     <!-- 如果article的值为null 不显示more-action -->
+    <More-Action
+     @handleSuccess="handleSuccess"
+    v-if="currentArticle"
+    :article="currentArticle"
+    v-model="showMoreAction">
+
+    </More-Action>
   </div>
 </template>
 
@@ -94,7 +102,9 @@ export default {
       activeIndex: 0,
       // 下拉更新完毕之后显示，成功的提示
       successText: '',
-      showMoreAction: false
+      showMoreAction: false,
+      // 点击x的时候，记录的当前文章对象
+      currentArticle: null
     }
   },
   created () {
@@ -172,6 +182,26 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    // 点击x按钮，弹出MoreAction，并且记录对应的文章对象
+    handleAction (article) {
+      this.showMoreAction = true
+      this.currentArticle = article
+    },
+    // more-action中操作成功执行的方法
+    handleSuccess () {
+      // 隐藏
+      this.showMoreAction = false
+      // 去掉当前的文章数据
+      // this.currentArticle
+      // 找到当前文章在数组中的索引
+      // findIndex() 查找第一个满足条件的元素的索引
+      const articles = this.currentChannel.articles
+      const index = articles.findIndex((article) => {
+        return article.art_id === this.currentArticle.art_id
+      })
+      // 删除指定位置的元素
+      articles.splice(index, 1)
     }
   }
 }
