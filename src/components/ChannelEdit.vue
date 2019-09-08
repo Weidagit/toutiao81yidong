@@ -3,7 +3,7 @@
     :value="value"
     @input="$emit('input',$event)"
     position="bottom"
-    :style="{ height: '80%' }"
+    :style="{ height: '90%' }"
   >
        <van-cell icon="cross" @click="$emit('input', false)"/>
     <!-- 我的频道 -->
@@ -27,7 +27,6 @@
       <van-grid-item
        v-for="(channel,index) in channels"
         :key="channel.id"
-        :text="channel.name"
          @click="handleMyChannelItem(index,channel.id)"
       >
       <div slot="text" class="van-grid-item__text" :class="{ color: active === index }" >
@@ -46,9 +45,10 @@
     <van-cell title="推荐频道" label="点击添加频道" />
     <van-grid>
       <van-grid-item
-        v-for="Channel in recommendChannels"
-        :key="Channel.id"
-        :text="Channel.name"
+        @click="handleChannelItem(channel)"
+        v-for="channel in recommendChannels"
+        :key="channel.id"
+        :text="channel.name"
       />
     </van-grid>
   </van-popup>
@@ -57,7 +57,7 @@
 <script>
 import { mapState } from 'vuex'
 import { setItem } from '@/utils/localStorage'
-import { getAllChannels, deleteChannel } from '../api/channel'
+import { getAllChannels, deleteChannel, addChannel } from '../api/channel'
 export default {
   name: 'ChannelEdit',
   props: {
@@ -120,6 +120,7 @@ export default {
         // 告诉父组件，选中的频道的索引
         // 关闭对话框
         this.$emit('activeChange', index)
+        return
       }
       // 2. 编辑模式
       // 2.1 把点击的频道，从我的频道移除
@@ -130,12 +131,31 @@ export default {
         // 2.3 如果登录，发送请求
         try {
           await deleteChannel(channelId)
+          // return
         } catch (err) {
           this.$toast.fail('操作失败')
         }
         return
       }
       // 2.4 没有登录，把频道列表记录到本地存储
+      setItem('channels', this.channels)
+    },
+    // 点击推荐频道的时候
+    async handleChannelItem (channel) {
+      // 1. 把channel添加到我的频道
+      this.channels.push(channel)
+
+      // 2. 判断是否登录
+      if (this.user) {
+        // 3. 如果登录，发送请求
+        try {
+          await addChannel(channel.id, this.channels.length)
+        } catch (err) {
+          this.$toast.fail('操作失败')
+        }
+        return
+      }
+      // 4. 如果没有登录，把我的频道存储到本地存储
       setItem('channels', this.channels)
     }
   }

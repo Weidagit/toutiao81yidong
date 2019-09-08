@@ -87,6 +87,7 @@ import { getItem, setItem } from '../../utils/localStorage'
 // options 为可选参数，无则不传
 Vue.use(Lazyload)
 export default {
+  name: 'Home',
   components: {
     ChannelEdit,
     MoreAction
