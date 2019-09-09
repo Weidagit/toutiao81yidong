@@ -19,3 +19,7 @@ export const blacklists = (id) => {
     target: id
   })
 }
+// 获取用户搜索历史
+export const getUserHistories = () => {
+  return request.get('/app/v1_0/search/histories')
+}
