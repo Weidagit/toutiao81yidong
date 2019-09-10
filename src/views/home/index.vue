@@ -117,6 +117,16 @@ export default {
   },
   created () {
     this.loadChannels()
+    console.log('created')
+  },
+  // keep-alive 生命周期函数
+  activated () {
+    // 在keep-alive缓存的组件被激活时触发
+    console.log('activated')
+  },
+  deactivated () {
+    // keep-alive缓存的组件停用时调用
+    console.log('deactivated')
   },
   computed: {
     // 返回当前的频道对象
