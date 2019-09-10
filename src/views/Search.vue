@@ -15,10 +15,12 @@
       <van-cell
         v-for="item in suggestionList"
         @click="onSearch(item)"
-        :title="item"
         :key="item"
         icon="search"
-      />
+      >
+  <div slot="title" v-html="highlight(item)"></div>
+      </van-cell>
+
     </van-cell-group>
 
     <!-- 历史记录 -->
@@ -31,7 +33,10 @@
         </div>
         <van-icon v-show="!isEdit" @click="isEdit=true" name="delete" size="18px" />
       </van-cell>
-      <van-cell v-for="(item,index) in histories" :key="item" :title="item">
+      <van-cell
+      @click="onSearch(item)"
+      v-for="(item,index) in histories"
+      :key="item" :title="item">
         <!-- 自定义右侧内容 -->
        <van-icon v-show="isEdit" name="close" @click="handleDelete(index)" size="18px" />
       </van-cell>
@@ -40,10 +45,11 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { getSuggestion } from '../api/search'
 import { mapState } from 'vuex'
 import { getItem, setItem } from '../utils/localStorage'
-// import { getUserHistories } from '../api/user'
+import { getUserHistories } from '../api/user'
 export default {
   name: 'Search',
   data () {
@@ -63,7 +69,13 @@ export default {
 
   methods: {
     async onSearch (item) {
-      console.log(item)
+      // 跳转到搜索结果页面
+      this.$router.push({
+        name: 'search-result',
+        params: {
+          q: item
+        }
+      })
       // 判断histories中是否已经存在item
       if (this.histories.includes(item)) {
         return
@@ -73,15 +85,17 @@ export default {
       // 判断是否登录
       if (this.user) {
         // 发送请求
-        // const data = await getUserHistories()
-        // console.log(data)
-        // this.histories = data
-        // return
+        const data = await getUserHistories() || []
+        console.log(data.message)
+        this.histories.push(...data.keywords)
+        return
       }
       setItem('history', this.histories)
     },
     onCancel () {},
-    async hangleInput () {
+    // 在文本框输入的过程中获取搜索提示
+    hangleInput: _.debounce(async function () {
+      // 判断是否为空
       if (this.value.length === 0) {
         return
       }
@@ -91,21 +105,28 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
+    }, 300),
     // 点击历史记录的删除按钮
     handleDelete (index) {
       this.histories.splice(index, 1)
       setItem('history', this.histories)
     },
-    created () {
+    async created () {
       if (this.user) {
       // 发送请求
-        //   const data = getUserHistories()
-        //   console.log(data.keywords)
-        //   this.histories = data
-        //   return
+        // const data = await getUserHistories() || []
+        // this.histories = data.keywords
+        // return
       }
       this.histories = getItem('history') || []
+    },
+    // 高亮显示搜索建议中的匹配内容
+    highlight (item) {
+      // item 是提示项目
+      // this.value
+      const reg = new RegExp(this.value, 'gi')
+      // /abc/gi
+      return item.replace(reg, `<span style="color: red">${this.value}</span>`)
     }
   }
 }
