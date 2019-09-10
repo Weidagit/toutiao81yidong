@@ -17,6 +17,7 @@
      <div class="article-content" v-html="article.content">
      </div>
       <!-- 点赞和取消 -->
+     <more-action :article="article"></more-action>
     </div>
   </div>
 </template>
@@ -24,12 +25,14 @@
 <script>
 import { getArticle } from '../../api/article'
 import AuthorInfo from './component/AuthorInfo'
+import MoreAction from './component/MoreAction'
 export default {
 
   name: 'Detail',
   props: ['id'],
   components: {
-    AuthorInfo
+    AuthorInfo,
+    MoreAction
   },
   data () {
     return {

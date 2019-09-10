@@ -29,9 +29,13 @@ export default {
   },
   methods: {
     // 点击按钮，关注或者取消关注作者
+    // 判断是否登录
     async handleFollow () {
+      if (!this.$checkLogin()) {
+        return
+      }
       this.loading = true
-      // 判断是否登录
+
       try {
         // 判断是否已经关注
         if (this.article.is_followed) {
