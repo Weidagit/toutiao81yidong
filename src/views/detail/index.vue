@@ -12,6 +12,7 @@
       <!-- 文章标题 -->
       <h2 class="article-title">{{ article.title }}</h2>
       <!-- 作者信息 -->
+     <author-info :article="article"></author-info>
       <!-- 文章内容 -->
      <div class="article-content" v-html="article.content">
      </div>
@@ -22,9 +23,14 @@
 
 <script>
 import { getArticle } from '../../api/article'
+import AuthorInfo from './component/AuthorInfo'
 export default {
+
   name: 'Detail',
   props: ['id'],
+  components: {
+    AuthorInfo
+  },
   data () {
     return {
       article: null
@@ -50,7 +56,7 @@ export default {
 
 <style lang="less" scoped>
 .article {
-  margin-top: 50px;
+  margin-top: 46px;
   padding: 0px 20px;
   .article-title {
     font-size: 20px;
