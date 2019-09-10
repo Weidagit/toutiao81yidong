@@ -22,7 +22,8 @@
       <CommentList :isArticle="true" :id="article.art_id.toString()"></CommentList>
        <!-- 发布评论 -->
       <send-comment :target="article.art_id.toString()" :isArticle="true"></send-comment>
-      <reply-list v-model="showReplyList"></reply-list>
+     <!-- 回复的评论列表 -->
+      <reply-list v-model="showReplyList" :art_id="id"></reply-list>
     </div>
   </div>
 </template>
@@ -52,6 +53,7 @@ export default {
   computed: {
     ...mapState(['showReplyList'])
   },
+  // 文章id
   props: ['id'],
   data () {
     return {
