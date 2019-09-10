@@ -16,6 +16,7 @@
 
 <script>
 import { sendComment } from '../../../api/comment'
+import eventHub from '@/utils/eventHub'
 export default {
   name: 'SendComment',
   props: ['isArticle', 'target', 'art_id'],
@@ -41,6 +42,11 @@ export default {
           target: this.target,
           content: this.content,
           art_id: this.art_id
+        })
+        // 触发事件
+        eventHub.$emit('sendSuccess', {
+          comment: data.new_obj,
+          isArticle: this.isArticle
         })
         // console.log(data)
         // data.new_obj 刚发送的评论
