@@ -31,14 +31,21 @@
         </p>
       </div>
     </van-cell>
+     <!-- 评论的回复列表 -->
+    <h3>回复列表</h3>
+    <comment-list :isArticle="false" :id="currentComment.com_id.toString()"></comment-list>
   </van-popup>
 </template>
 
 <script>
+import CommentList from './CommentList'
 import { mapState } from 'vuex'
 export default {
   name: 'ReplyList',
   props: ['value'],
+  components: {
+    CommentList
+  },
   computed: {
     ...mapState(['currentComment'])
   }
