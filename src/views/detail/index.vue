@@ -19,7 +19,7 @@
       <!-- 点赞和取消 -->
      <more-action :article="article"></more-action>
       <!-- 评论列表 -->
-      <comment-list></comment-list>
+      <CommentList :isArticle="true" :id="article.art_id.toString()"></CommentList>
     </div>
   </div>
 </template>
