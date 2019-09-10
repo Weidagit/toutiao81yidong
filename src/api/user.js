@@ -23,3 +23,13 @@ export const blacklists = (id) => {
 export const getUserHistories = () => {
   return request.get('/app/v1_0/search/histories')
 }
+// 关注作者
+export const followUser = (id) => {
+  return request.post('/app/v1_0/user/followings', {
+    target: id
+  })
+}
+// 取消关注作者
+export const unfollowUser = (id) => {
+  return request.delete(`/app/v1_0/user/followings/${id}`)
+}
