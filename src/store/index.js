@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     user: storsgeTools.getItem('user'),
     // 控制评论的回复组件是否显示
-    showReplyList: false
+    showReplyList: false,
+    currentComment: null
   },
   mutations: {
     setUser (state, user) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     setShowReplyList (state, isShow) {
       state.showReplyList = isShow
+    },
+    setCurrentComment (state, comment) {
+      state.currentComment = comment
     }
   },
   actions: {
