@@ -22,7 +22,7 @@
           >
            <!-- 点击cell跳转到文章详情页面 -->
             <van-cell
-             @click="$router.push({ name: 'detail', params: { id: article.art_id.toString() } })"
+             @click="$router.push({ name: 'detail', params: { id: article.art_id.toString()} })"
               v-for="article in currentChannel.articles"
               :key="article.art_id.toString()"
               :title="article.title"

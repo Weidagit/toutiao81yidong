@@ -53,13 +53,16 @@ export default {
     // 喜欢和取消喜欢
     async handlelike () {
       // 判断是否登录
+      if (!this.$checkLogin()) {
+        return
+      }
       // 不喜欢或者取消不喜欢
       try {
         // 用户对文章的态度, -1: 无态度，0-不喜欢，1-点赞
         if (this.article.attitude === 0) {
           // 当前已经对文章不喜欢，取消不喜欢
           await unDislikeArticle(this.article.art_id)
-          this.article.attitude = -1
+          this.article.attitude = 2
         } else {
           await dislikeArticle(this.article.art_id)
           this.article.attitude = 0

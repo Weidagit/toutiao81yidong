@@ -29,11 +29,11 @@ import MoreAction from './component/MoreAction'
 export default {
 
   name: 'Detail',
-  props: ['id'],
   components: {
     AuthorInfo,
     MoreAction
   },
+  props: ['id'],
   data () {
     return {
       article: null
