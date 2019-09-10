@@ -81,4 +81,7 @@ export default {
   margin-right: 5px;
   z-index: 1000
 }
+.van-list {
+  margin-bottom: 64px;
+}
 </style>
