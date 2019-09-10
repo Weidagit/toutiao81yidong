@@ -19,7 +19,7 @@
         <van-button icon="like-o" size="mini" plain>赞</van-button>
       </div>
       <div slot="label">
-        <p>{{ comment.content }}/p>
+        <p>{{ comment.content }}</p>
         <p>
           <span>{{ comment.pubdate | fmtDate }}</span>
           ·
