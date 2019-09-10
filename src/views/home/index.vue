@@ -57,6 +57,7 @@
       </van-tab>
     </van-tabs>
     <Channel-Edit
+     @last="handleLast"
     @activeChange="handleChange"
     :active="activeIndex"
     :channels="channels"
@@ -229,6 +230,10 @@ export default {
     handleChange (index) {
       this.activeIndex = index
       this.showChannelEdit = false
+    },
+    // 当频道管理删除的是，激活索引是数组最后一项的时候
+    handleLast () {
+      this.activeIndex--
     }
   }
 }
