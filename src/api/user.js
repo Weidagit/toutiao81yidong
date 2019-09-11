@@ -33,3 +33,8 @@ export const followUser = (id) => {
 export const unfollowUser = (id) => {
   return request.delete(`/app/v1_0/user/followings/${id}`)
 }
+
+// 获取当前登录的用户的资料
+export const getUserProfile = () => {
+  return request.get('/app/v1_0/user/profile')
+}
