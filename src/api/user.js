@@ -48,3 +48,8 @@ export const uploadPhoto = (key, file) => {
   formData.append(key, file)
   return request.patch('/app/v1_0/user/photo', formData)
 }
+
+// 获取当前登录的用户信息
+export const getUserInfo = () => {
+  return request.get('/app/v1_0/user')
+}
