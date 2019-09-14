@@ -1,6 +1,7 @@
 <template>
   <div>
-    <van-nav-bar title="琳达头条" fixed />
+    <van-icon name="search" size="25px" color="white" @click="gosearchPush" class="searchPush"/>
+    <van-nav-bar title="天天头条" fixed />
     <!-- 频道列表 -->
     <van-tabs animated v-model="activeIndex">
       <!-- 小按钮，点击弹出频道管理的弹出层 -->
@@ -244,6 +245,9 @@ export default {
     // 当频道管理删除的是，激活索引是数组最后一项的时候
     handleLast () {
       this.activeIndex--
+    },
+    gosearchPush () {
+      this.$router.push('/search')
     }
   }
 }
@@ -262,6 +266,14 @@ export default {
     margin-top: 90px;
     margin-bottom: 50px;
   }
+
+}
+.searchPush{
+   position: fixed;
+    top: 10px;
+    left: 299px;
+    right: 10px;
+    z-index: 1000;
 }
 .nav-btn {
   position: fixed;

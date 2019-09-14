@@ -6,7 +6,7 @@
       title="文章详情"
       left-text="返回"
 
-      @click-left="$router.back()"
+      @click-left="$router.push('/')"
     />
     <div class="article" v-if="article" >
       <!-- 文章标题 -->

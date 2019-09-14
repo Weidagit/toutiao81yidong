@@ -31,7 +31,7 @@
       loading-text="正在登陆..."
       class="btn"
       type="info"
-      @click="onLogin">登陆</van-button>
+      @click="onLogin" color="#f83ef8">登陆</van-button>
     </div>
   </div>
 </template>

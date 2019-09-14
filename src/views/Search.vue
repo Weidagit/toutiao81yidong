@@ -92,7 +92,9 @@ export default {
       }
       setItem('history', this.histories)
     },
-    onCancel () {},
+    onCancel () {
+      this.$router.push('/')
+    },
     // 在文本框输入的过程中获取搜索提示
     hangleInput: _.debounce(async function () {
       // 判断是否为空

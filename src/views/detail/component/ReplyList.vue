@@ -58,7 +58,9 @@ export default {
   },
   created () {
     eventHub.$on('sendSuccess', () => {
-      this.currentComment.reply_count++
+      if (this.currentComment !== null) {
+        this.currentComment.reply_count++
+      }
     })
   }
 }

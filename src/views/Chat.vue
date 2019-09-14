@@ -1,6 +1,6 @@
 <template>
   <div class="page-user-chat">
-    <van-nav-bar fixed left-arrow @click-left="$router.back()" title="小智同学"></van-nav-bar>
+    <van-nav-bar fixed left-arrow @click-left="$router.back()" title="天天同学"></van-nav-bar>
     <div ref="chatList" class="chat-list">
     <div
         v-for="chat in list"
@@ -81,16 +81,20 @@ export default {
         msg: this.value,
         timestamp: Date.now()
       }
-      this.list.push(data)
+
       // 发送消息
       this.socket.send(data)
-
+      this.list.push(data)
       // 更新滚动条的位置
       this.update()
     },
     update () {
       // 更新chat-list的scrollTop
-      this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+      // 等DOM下一个渲染完毕，再执行
+      this.$nextTick(() => {
+        // 更新chat-list的scrollTop
+        this.$refs.chatList.scrollTop = this.$refs.chatList.scrollHeight
+      })
     }
   }
 }
